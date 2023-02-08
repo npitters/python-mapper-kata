@@ -2,8 +2,10 @@
 
 set -e
 
+cd "$(dirname "$0")/.."
+
 export PYTHONPATH="./app"
 
 poetry install
 
-poetry run pytest ./tests/unit_tests
+poetry run pytest ./tests

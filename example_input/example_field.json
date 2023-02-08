@@ -2,8 +2,8 @@
     "id": 101,
     "name": "Jumper Smith",
     "class": "Junior",
-    "gender": "M",
-    "eventType": 2,
-    "event": 2003,
-    "marks": "13ft 1in|12ft 5in|14ft 0in|13ft 5in|14ft 5in"
+    "eventClassification": "B",
+    "eventTypeId": 2,
+    "eventId": 2003,
+    "marks": "13ft 1in|9ft 5in|14ft 0in|13ft 5in|14ft 5in"
 }
