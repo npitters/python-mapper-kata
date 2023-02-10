@@ -33,7 +33,7 @@ the value is not included in the translation table then an execption should be r
 | NTFB Field (target) | Data Type | Required | PLVHS Field (source) | Rules                                                                      |
 |---------------------| --------- |:--------:|--------------------- |----------------------------------------------------------------------------|
 | id                  | string    |     X    | id                   |                                                                            |
-| firstName           | string    |          | name                 | The `name` in the sourcde data is in the format `first name + ' ' + last name`.<br /><br />Map the `first name` part of of the source field.  If for some reason the `first name` cannot be parsed out then leave it out of the target json. |
+| firstName           | string    |          | name                 | The `name` in the source data is in the format `first name + ' ' + last name`.<br /><br />Map the `first name` part of of the source field.  If for some reason the `first name` cannot be parsed out then leave it out of the target json. |
 | lastName            | string    |          | name                 | The `name` in the source data is in the format `first name + ' ' + last name`.<br /><br />Map the `last name` part of of the source field.  If for some reason the `last name` cannot be parsed out set this to the default value of "Unknown". |
 | school              | string    |     X    |                      | Always map hard coded value "Papillion Lavistia High School"                |
 | state               | string    |     X    |                      | Always map hard coded value "NE"                                            |
