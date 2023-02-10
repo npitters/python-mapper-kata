@@ -8,4 +8,4 @@ export PYTHONPATH="./app"
 
 poetry install
 
-poetry run pytest ./tests
+poetry run pytest -vv ./tests
