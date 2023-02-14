@@ -76,3 +76,13 @@ def test_transform_with_missing_school_name_maps_default_name():
     actual_result = transform(data)
 
     assert actual_result["school"] == "Papillion Lavistia High School"
+
+def test_transform_with_missing_state_name_maps_default_name():
+    data = {
+        "id": 123,
+        "name": "Joe Biden"
+    }
+
+    actual_result = transform(data)
+
+    assert actual_result["state"] == "NE"
