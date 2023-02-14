@@ -16,3 +16,4 @@ def test_from_json_with_valid_schema():
 
     assert result.id == "101"
     assert result.name == "Jumper Smith"
+    assert result.grade == "Junior"
