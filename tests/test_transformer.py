@@ -4,10 +4,6 @@ from app.transformer import transform
 
 
 
-@pytest.fixture()
-def transform_required_fields():
-    with patch("transformer.MissingRequiredFieldException") as mock:
-        yield mock
 def test_transform_with_valid_id_maps_id():
     data = {
         "id": 101,
