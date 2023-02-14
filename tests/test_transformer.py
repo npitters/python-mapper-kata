@@ -44,7 +44,7 @@ def test_transform_with_valid_name_maps_lastname_firstname():
     actual_result = transform(data)
 
     assert actual_result["firstName"] == "Joe"
-    assert actual_result['lastName'] == "Biden"
+    assert actual_result["lastName"] == "Biden"
 
 def test_transform_with_valid_name_maps_lastname_only_with_no_firstname():
     data = {
@@ -55,4 +55,14 @@ def test_transform_with_valid_name_maps_lastname_only_with_no_firstname():
     actual_result = transform(data)
 
     assert "firstName" not in actual_result
-    assert actual_result['lastName'] == "Biden"
+    assert actual_result["lastName"] == "Biden"
+
+def test_transform_with_valid_name_maps_lastname_as_unknown_when_missing():
+    data = {
+        "id": 123,
+        "name": ""
+    }
+
+    actual_result = transform(data)
+
+    assert actual_result["lastName"] == "Unknown"
