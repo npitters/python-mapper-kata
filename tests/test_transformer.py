@@ -66,3 +66,13 @@ def test_transform_with_valid_name_maps_lastname_as_unknown_when_missing():
     actual_result = transform(data)
 
     assert actual_result["lastName"] == "Unknown"
+
+def test_transform_with_missing_school_name_maps_default_name():
+    data = {
+        "id": 123,
+        "name": "Joe Biden"
+    }
+
+    actual_result = transform(data)
+
+    assert actual_result["school"] == "Papillion Lavistia High School"

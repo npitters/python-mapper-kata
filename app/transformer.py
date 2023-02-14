@@ -1,6 +1,7 @@
 class MissingRequiredFieldException(Exception):
     pass
 
+DEFAULT_SCHOOL_NAME = "Papillion Lavistia High School"
 
 def transform(raw_data):
     transform_data = {}
@@ -14,7 +15,8 @@ def transform(raw_data):
         transform_data["lastName"] = _name_transformer(name, 1)[1]
     else:
         transform_data["lastName"] = _name_transformer(name)
-    transform_data["id"] = raw_data["id"] 
+    transform_data["id"] = raw_data["id"]
+    transform_data["school"] = DEFAULT_SCHOOL_NAME
     return transform_data
 
 def _parse_name(data):
