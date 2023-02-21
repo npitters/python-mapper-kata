@@ -1,17 +1,23 @@
 from enum import Enum
 
+
 class GradeMapping(Enum):
     def __str__(self):
-        return '%s' % self.value
+        return "%s" % self.value
+
     Freshman = 9
     Sophomore = 10
     Junior = 11
     Senior = 12
+
+
 class MissingRequiredFieldException(Exception):
     pass
 
+
 DEFAULT_SCHOOL_NAME = "Papillion Lavistia High School"
 DEFAULT_STATE_NAME = "NE"
+
 
 def transform(raw_data):
     transform_data = {}
@@ -33,13 +39,17 @@ def transform(raw_data):
     transform_data["school"] = DEFAULT_SCHOOL_NAME
     transform_data["state"] = DEFAULT_STATE_NAME
     transform_data["grade"] = _grade_transformer(raw_data["class"])
+
     return transform_data
+
 
 def _parse_name(data):
     return data.split(" ")
 
+
 def _grade_transformer(class_name):
     return GradeMapping[class_name].value
+
 
 def _name_transformer(name, index=0):
     if index > 0:
