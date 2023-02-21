@@ -20,7 +20,7 @@ def test_transform_with_valid_id_maps_id():
 
 
 def test_transform_with_invalid_id_field_returns_exception():
-    data = {"id": None}
+    data = {"id": ""}
 
     with pytest.raises(Exception) as err:
         transform(data)
@@ -38,25 +38,25 @@ def test_transform_with_missing_id_field_returns_exception():
 
 
 def test_transform_with_valid_name_maps_lastname_firstname():
-    data = {"id": 123, "name": "Joe Biden", "class": "Junior"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
-    assert actual_result["firstName"] == "Joe"
-    assert actual_result["lastName"] == "Biden"
+    assert actual_result["firstName"] == "Usain"
+    assert actual_result["lastName"] == "Bolt"
 
 
 def test_transform_with_valid_name_maps_lastname_only_with_no_firstname():
-    data = {"id": 123, "name": "Biden", "class": "Junior"}
+    data = {"id": 123, "name": "Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
     assert "firstName" not in actual_result
-    assert actual_result["lastName"] == "Biden"
+    assert actual_result["lastName"] == "Bolt"
 
 
 def test_transform_with_valid_name_maps_lastname_as_unknown_when_missing():
-    data = {"id": 123, "name": "", "class": "Junior"}
+    data = {"id": 123, "name": "", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -64,7 +64,7 @@ def test_transform_with_valid_name_maps_lastname_as_unknown_when_missing():
 
 
 def test_transform_with_missing_school_name_maps_default_name():
-    data = {"id": 123, "name": "Joe Biden", "class": "Junior"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -72,7 +72,7 @@ def test_transform_with_missing_school_name_maps_default_name():
 
 
 def test_transform_with_missing_state_name_maps_default_name():
-    data = {"id": 123, "name": "Joe Biden", "class": "Junior"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -80,7 +80,7 @@ def test_transform_with_missing_state_name_maps_default_name():
 
 
 def test_transform_with_valid_class_name_junior_maps_grade_int():
-    data = {"id": 123, "name": "Joe Biden", "class": "Junior"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -88,7 +88,7 @@ def test_transform_with_valid_class_name_junior_maps_grade_int():
 
 
 def test_transform_with_valid_class_name_sophomore_maps_grade_int():
-    data = {"id": 123, "name": "Joe Biden", "class": "Sophomore"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Sophomore", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -96,7 +96,7 @@ def test_transform_with_valid_class_name_sophomore_maps_grade_int():
 
 
 def test_transform_with_valid_class_name_freshman_maps_grade_int():
-    data = {"id": 123, "name": "Joe Biden", "class": "Freshman"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Freshman", "eventClassification": "B"}
 
     actual_result = transform(data)
 
@@ -104,8 +104,32 @@ def test_transform_with_valid_class_name_freshman_maps_grade_int():
 
 
 def test_transform_with_valid_class_name_senior_maps_grade_int():
-    data = {"id": 123, "name": "Joe Biden", "class": "Senior"}
+    data = {"id": 123, "name": "Usain Bolt", "class": "Senior", "eventClassification": "B"}
 
     actual_result = transform(data)
 
     assert actual_result["grade"] == 12
+
+
+def test_transform_with_missing_classification_field_returns_exception():
+    data = {"id": 123, "name": "Usain Bolt", "class": "Senior", "eventClassification": ""}
+
+    with pytest.raises(Exception) as err:
+        transform(data)
+
+    assert err.value.args[0] == "Missing required field"
+
+
+def test_transform_with_valid_classification_field_maps_target_value_for_boys():
+    data = {"id": 123, "name": "Usain Bolt", "class": "Senior", "eventClassification": "B"}
+
+    actual_result = transform(data)
+
+    assert actual_result["classification"] == "Boys"
+
+def test_transform_with_valid_classification_field_maps_target_value_for_girls():
+    data = {"id": 123, "name": "Lilliane Bolt", "class": "Senior", "eventClassification": "G"}
+
+    actual_result = transform(data)
+
+    assert actual_result["classification"] == "Girls"
