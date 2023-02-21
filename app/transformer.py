@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+class ClassificationKey(Enum):
+    G = "Girls"
+    B = "Boys"
+
 class GradeMapping(Enum):
     def __str__(self):
         return "%s" % self.value
@@ -12,7 +16,11 @@ class GradeMapping(Enum):
 
 
 class MissingRequiredFieldException(Exception):
-    pass
+    def __init__(self, field=None):
+        self.field = field
+
+        default_message = f"Missing required field, '{field}'"
+        super().__init__(default_message)
 
 
 DEFAULT_SCHOOL_NAME = "Papillion Lavistia High School"
@@ -23,11 +31,14 @@ def transform(raw_data):
     transform_data = {}
 
     if not raw_data:
-        raise MissingRequiredFieldException("Missing required field")
+        raise MissingRequiredFieldException("Missing required field, ''")
     if not raw_data["id"]:
-        raise MissingRequiredFieldException("Missing required field")
+        raise MissingRequiredFieldException("Missing required field, 'id'")
     if not raw_data["class"]:
-        raise MissingRequiredFieldException("Missing required field")
+        raise MissingRequiredFieldException("Missing required field, 'class'")
+    if not raw_data["eventClassification"]:
+        raise MissingRequiredFieldException("Missing required field, 'eventClassification'")
+
     name = _parse_name(raw_data["name"])
 
     if len(name) > 1:
@@ -39,6 +50,7 @@ def transform(raw_data):
     transform_data["school"] = DEFAULT_SCHOOL_NAME
     transform_data["state"] = DEFAULT_STATE_NAME
     transform_data["grade"] = _grade_transformer(raw_data["class"])
+    transform_data["classification"] = _classification_transformer(raw_data["eventClassification"])
 
     return transform_data
 
@@ -59,3 +71,6 @@ def _name_transformer(name, index=0):
     lastName = "Unknown" if not name[0] else name[0]
 
     return lastName
+
+def _classification_transformer(classification_key_name):
+    return ClassificationKey[classification_key_name].value

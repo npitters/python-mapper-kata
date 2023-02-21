@@ -19,13 +19,13 @@ def test_transform_with_valid_id_maps_id():
     assert result["id"] == 101
 
 
-def test_transform_with_invalid_id_field_returns_exception():
+def test_transform_with_invalid_id_field_returns_exception_with_missing_field_id():
     data = {"id": ""}
 
     with pytest.raises(Exception) as err:
         transform(data)
 
-    assert err.value.args[0] == "Missing required field"
+    assert "Missing required field, 'id'" in str(err.value)
 
 
 def test_transform_with_missing_id_field_returns_exception():
@@ -34,7 +34,7 @@ def test_transform_with_missing_id_field_returns_exception():
     with pytest.raises(Exception) as err:
         transform(data)
 
-    assert err.value.args[0] == "Missing required field"
+    assert "Missing required field, ''" in str(err.value)
 
 
 def test_transform_with_valid_name_maps_lastname_firstname():
@@ -111,13 +111,13 @@ def test_transform_with_valid_class_name_senior_maps_grade_int():
     assert actual_result["grade"] == 12
 
 
-def test_transform_with_missing_classification_field_returns_exception():
+def test_transform_with_missing_classification_field_returns_exception_with_missing_field_eventClassification():
     data = {"id": 123, "name": "Usain Bolt", "class": "Senior", "eventClassification": ""}
 
     with pytest.raises(Exception) as err:
         transform(data)
 
-    assert err.value.args[0] == "Missing required field"
+    assert "Missing required field, 'eventClassification'" in str(err.value)
 
 
 def test_transform_with_valid_classification_field_maps_target_value_for_boys():
