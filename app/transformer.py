@@ -46,7 +46,8 @@ def transform(raw_data):
         transform_data["lastName"] = _name_transformer(name, 1)[1]
     else:
         transform_data["lastName"] = _name_transformer(name)
-    transform_data["id"] = raw_data["id"]
+
+    transform_data["id"] = _id_transformer(raw_data)
     transform_data["school"] = DEFAULT_SCHOOL_NAME
     transform_data["state"] = DEFAULT_STATE_NAME
     transform_data["grade"] = _grade_transformer(raw_data["class"])
@@ -55,22 +56,23 @@ def transform(raw_data):
     return transform_data
 
 
-def _parse_name(data):
-    return data.split(" ")
+def _id_transformer(id_name):
+    return id_name["id"]
 
+def _parse_name(full_name):
+    return full_name.split(" ")
 
-def _grade_transformer(class_name):
-    return GradeMapping[class_name].value
+def _grade_transformer(class_data):
+    return GradeMapping[class_data].value
 
-
-def _name_transformer(name, index=0):
+def _name_transformer(full_name, index=0):
     if index > 0:
-        firstName = name[0]
-        lastName = name[1]
+        firstName = full_name[0]
+        lastName = full_name[1]
         return (firstName, lastName)
-    lastName = "Unknown" if not name[0] else name[0]
+    lastName = "Unknown" if not full_name[0] else full_name[0]
 
     return lastName
 
-def _classification_transformer(classification_key_name):
-    return ClassificationKey[classification_key_name].value
+def _classification_transformer(class_name):
+    return ClassificationKey[class_name].value
