@@ -20,5 +20,5 @@ class TrackAndFieldDb:
             name=json_dict.get("name"),
             grade=json_dict.get("class"),
             classification=json_dict.get("eventClassification"),
-            eventName=json_dict.get("eventTypeId")
+            eventName=json_dict.get("eventId")
         )
