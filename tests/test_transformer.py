@@ -79,7 +79,7 @@ def test_transform_with_missing_state_name_maps_default_name():
     assert actual_result["state"] == "NE"
 
 
-def test_transform_with_valid_class_name_junior_maps_grade_int():
+def test_transform_with_valid_class_name_junior_maps_grade_as_int():
     data = {"id": 123, "name": "Usain Bolt", "class": "Junior", "eventClassification": "B"}
 
     actual_result = transform(data)
@@ -87,7 +87,7 @@ def test_transform_with_valid_class_name_junior_maps_grade_int():
     assert actual_result["grade"] == 11
 
 
-def test_transform_with_valid_class_name_sophomore_maps_grade_int():
+def test_transform_with_valid_class_name_sophomore_maps_grade_as_int():
     data = {"id": 123, "name": "Usain Bolt", "class": "Sophomore", "eventClassification": "B"}
 
     actual_result = transform(data)
@@ -95,7 +95,7 @@ def test_transform_with_valid_class_name_sophomore_maps_grade_int():
     assert actual_result["grade"] == 10
 
 
-def test_transform_with_valid_class_name_freshman_maps_grade_int():
+def test_transform_with_valid_class_name_freshman_maps_grade_as_int():
     data = {"id": 123, "name": "Usain Bolt", "class": "Freshman", "eventClassification": "B"}
 
     actual_result = transform(data)
@@ -103,7 +103,7 @@ def test_transform_with_valid_class_name_freshman_maps_grade_int():
     assert actual_result["grade"] == 9
 
 
-def test_transform_with_valid_class_name_senior_maps_grade_int():
+def test_transform_with_valid_class_name_senior_maps_grade_as_int():
     data = {"id": 123, "name": "Usain Bolt", "class": "Senior", "eventClassification": "B"}
 
     actual_result = transform(data)
@@ -126,6 +126,7 @@ def test_transform_with_valid_classification_field_maps_target_value_for_boys():
     actual_result = transform(data)
 
     assert actual_result["classification"] == "Boys"
+
 
 def test_transform_with_valid_classification_field_maps_target_value_for_girls():
     data = {"id": 123, "name": "Lilliane Bolt", "class": "Senior", "eventClassification": "G"}
