@@ -5,7 +5,7 @@ class TrackAndFieldDb:
         name: str = None,
         grade: str = None,
         classification: str = None,
-        eventName: int = None
+        eventName: int = None,
     ):
         self.id = id
         self.name = name
@@ -20,5 +20,5 @@ class TrackAndFieldDb:
             name=json_dict.get("name"),
             grade=json_dict.get("class"),
             classification=json_dict.get("eventClassification"),
-            eventName=json_dict.get("eventId")
+            eventName=json_dict.get("eventId"),
         )
