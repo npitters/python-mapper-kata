@@ -1,6 +1,22 @@
 from enum import Enum
 
 
+EVENT_NAMES = { 
+    1001: "100m",
+    1002: "200m",
+    1003: "400m",
+    1004: "800m",
+    1005: "1600m",
+    1006: "3200m",
+    2001: "Long Jump",
+    2002: "Triple Jump",
+    2003: "Pole Vault",
+    2004: "High Jump",
+    2005: "Shot Put",
+    2006: "Discus"
+   }
+
+
 class ClassificationKey(Enum):
     G = "Girls"
     B = "Boys"
@@ -52,6 +68,7 @@ def transform(raw_data):
     transform_data["state"] = DEFAULT_STATE_NAME
     transform_data["grade"] = _grade_transformer(raw_data["class"])
     transform_data["classification"] = _classification_transformer(raw_data["eventClassification"])
+    transform_data["eventName"] = _event_name_transformer(raw_data["eventId"])
 
     return transform_data
 
@@ -76,3 +93,6 @@ def _name_transformer(full_name, index=0):
 
 def _classification_transformer(class_name):
     return ClassificationKey[class_name].value
+
+def _event_name_transformer(event_id):
+    return EVENT_NAMES[event_id]
