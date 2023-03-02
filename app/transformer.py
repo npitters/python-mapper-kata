@@ -63,7 +63,7 @@ def transform(raw_data):
     else:
         transform_data["lastName"] = _name_transformer(name)
 
-    transform_data["id"] = _id_transformer(raw_data)
+    transform_data["id"] = str(_id_transformer(raw_data))
     transform_data["school"] = DEFAULT_SCHOOL_NAME
     transform_data["state"] = DEFAULT_STATE_NAME
     transform_data["grade"] = _grade_transformer(raw_data["class"])
