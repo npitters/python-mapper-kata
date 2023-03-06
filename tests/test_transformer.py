@@ -46,133 +46,55 @@ def test_transform_with_missing_source_id_field_returns_exception(athlete_id):
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(100, "Usain Bolt", "Junior", "B", 2003)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(100, "Usain Bolt", "Junior", "B", 2003, 2)],
 )
-def test_transform_with_valid_source_name_field_maps_lastname_firstname(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_name_field_maps_target_lastname_firstname(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
-    test_data = {
+    expected_data = {
         "id": athlete_id,
         "name": athlete_name,
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
-    actual_result = transform(test_data)
+    actual_result = transform(expected_data)
 
-    assert actual_result["firstName"] == "Usain"
-    assert actual_result["lastName"] == "Bolt"
+    assert "Usain" == actual_result["firstName"]
+    assert "Bolt" == actual_result["lastName"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Bolt", "Junior", "B", 2006)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Bolt", "Junior", "B", 2006, 2)],
 )
-def test_transform_with_valid_source_name_field_maps_lastname_only_with_no_firstname(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_name_missing_firstname_maps_target_lastname_only_with_no_firstname(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
-    test_data = {
+    expected_data = {
         "id": athlete_id,
         "name": athlete_name,
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
-    actual_result = transform(test_data)
+    actual_result = transform(expected_data)
 
     assert "firstName" not in actual_result
-    assert actual_result["lastName"] == test_data["name"]
+    assert expected_data["name"] == actual_result["lastName"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "", "Junior", "B", 2006)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "", "Junior", "B", 2006, 1)],
 )
-def test_transform_with_valid_source_name_field_maps_lastname_as_unknown_when_missing(
-    athlete_id, athlete_name, class_name, event_classification, event_id
-):
-    test_data = {
-        "id": athlete_id,
-        "name": athlete_name,
-        "class": class_name,
-        "eventClassification": event_classification,
-        "eventId": event_id,
-    }
-
-    actual_result = transform(test_data)
-
-    assert actual_result["lastName"] == "Unknown"
-
-
-@pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Michael Bolt", "Junior", "B", 2005)],
-)
-def test_transform_with_missing_source_school_name_field_maps_default_name(
-    athlete_id, athlete_name, class_name, event_classification, event_id
-):
-    test_data = {
-        "id": athlete_id,
-        "name": athlete_name,
-        "class": class_name,
-        "eventClassification": event_classification,
-        "eventId": event_id,
-    }
-
-    actual_result = transform(test_data)
-
-    assert actual_result["school"] == "Papillion Lavistia High School"
-
-
-@pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Usain Bolt", "Junior", "B", 1005)],
-)
-def test_transform_with_missing_source_state_name_field_maps_default_name(
-    athlete_id, athlete_name, class_name, event_classification, event_id
-):
-    test_data = {
-        "id": athlete_id,
-        "name": athlete_name,
-        "class": class_name,
-        "eventClassification": event_classification,
-        "eventId": event_id,
-    }
-
-    actual_result = transform(test_data)
-
-    assert actual_result["state"] == "NE"
-
-
-@pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Asafa Powell", "Junior", "B", 2006)],
-)
-def test_transform_with_valid_source_class_name_field_junior_maps_grade_as_int(
-    athlete_id, athlete_name, class_name, event_classification, event_id
-):
-    test_data = {
-        "id": athlete_id,
-        "name": athlete_name,
-        "class": class_name,
-        "eventClassification": event_classification,
-        "eventId": event_id,
-    }
-
-    actual_result = transform(test_data)
-
-    assert actual_result["grade"] == 11
-
-
-@pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Yohan Blake", "Sophomore", "B", 2006)],
-)
-def test_transform_with_valid_source_class_name_field_sophomore_maps_grade_as_int(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_name_field_missing_maps_target_lastname_as_unknown_when_missing(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -180,19 +102,20 @@ def test_transform_with_valid_source_class_name_field_sophomore_maps_grade_as_in
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["grade"] == 10
+    assert "Unknown" == actual_result["lastName"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Usain Bolt", "Freshman", "B", 2001)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Michael Bolt", "Junior", "B", 2005, 1)],
 )
-def test_transform_with_valid_source_class_field_name_freshman_maps_grade_as_int(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_school_name_field_maps_target_default_school_name(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -200,19 +123,20 @@ def test_transform_with_valid_source_class_field_name_freshman_maps_grade_as_int
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["grade"] == 9
+    assert "Papillion Lavistia High School" == actual_result["school"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Usain Bolt", "Senior", "B", 1004)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Usain Bolt", "Junior", "B", 1005, 1)],
 )
-def test_transform_with_valid_source_class_name_field_senior_maps_grade_as_int(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_state_name_field_maps_default_state_name(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -220,18 +144,103 @@ def test_transform_with_valid_source_class_name_field_senior_maps_grade_as_int(
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["grade"] == 12
+    assert "NE" == actual_result["state"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Asafa Powell", "Junior", "B", 2006, 2)],
+)
+def test_transform_with_source_athlete_class_name_field_junior_maps_grade_as_int_11(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert 11 == actual_result["grade"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Yohan Blake", "Sophomore", "B", 2006, 1)],
+)
+def test_transform_with_source_athlete_class_name_field_sophomore_maps_grade_as_int_10(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert 10 == actual_result["grade"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Usain Bolt", "Freshman", "B", 2001, 1)],
+)
+def test_transform_with_source_athlete_class_field_name_freshman_maps_grade_as_int_9(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert 9 == actual_result["grade"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Usain Bolt", "Senior", "B", 1004, 2)],
+)
+def test_transform_with_source_athlete_class_name_field_senior_maps_grade_as_int_12(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert 12 == actual_result["grade"]
 
 
 @pytest.mark.parametrize(
     "athlete_id, athlete_name, class_name, event_classification, event_id",
     [(123, "Usain Bolt", "Senior", "", 1004)],
 )
-def test_transform_with_missing_source_classification_field_returns_exception_with_missing_field_eventClassification(
+def test_transform_with_source_missing_athlete_classification_field_returns_exception_with_missing_field_event_classification(
     athlete_id, athlete_name, class_name, event_classification, event_id
 ):
     expected_data = {
@@ -248,11 +257,11 @@ def test_transform_with_missing_source_classification_field_returns_exception_wi
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Usain Bolt", "Senior", "B", 1003)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Usain Bolt", "Senior", "B", 1003, 2)],
 )
-def test_transform_with_valid_source_classification_field_maps_target_value_for_boys(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_classification_field_maps_target_value_for_boys(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -260,19 +269,20 @@ def test_transform_with_valid_source_classification_field_maps_target_value_for_
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["classification"] == "Boys"
+    assert "Boys" == actual_result["classification"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Lilliane Bolt", "Senior", "G", 1003)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Lilliane Bolt", "Senior", "G", 1003, 1)],
 )
-def test_transform_with_valid_source_classification_field_maps_target_value_for_girls(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_athlete_classification_field_maps_target_value_for_girls(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -280,19 +290,20 @@ def test_transform_with_valid_source_classification_field_maps_target_value_for_
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["classification"] == "Girls"
+    assert "Girls" == actual_result["classification"]
 
 
 @pytest.mark.parametrize(
-    "athlete_id, athlete_name, class_name, event_classification, event_id",
-    [(123, "Lilliane Bolt", "Senior", "G", 2003)],
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Lilliane Bolt", "Senior", "G", 2003, 1)],
 )
-def test_transform_with_valid_source_event_name_field_maps_target_value_for_eventid_name_pole_vault(
-    athlete_id, athlete_name, class_name, event_classification, event_id
+def test_transform_with_source_id_field_2003_maps_target_value_for_event_name_as_pole_vault(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
 ):
     expected_data = {
         "id": athlete_id,
@@ -300,8 +311,51 @@ def test_transform_with_valid_source_event_name_field_maps_target_value_for_even
         "class": class_name,
         "eventClassification": event_classification,
         "eventId": event_id,
+        "eventTypeId": event_type_id
     }
 
     actual_result = transform(expected_data)
 
-    assert actual_result["eventName"] == "Pole Vault"
+    assert "Pole Vault" in actual_result["eventName"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Lilliane Bolt", "Senior", "G", 2003, 2)],
+)
+def test_transform_with_source_field_athlete_event_type_id_2_map_the_correct_target_field_as_marks(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert "marks" == actual_result["personalBest"]
+
+
+@pytest.mark.parametrize(
+    "athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id",
+    [(123, "Lilliane Bolt", "Senior", "G", 2003, 1)],
+)
+def test_transform_with_source_field_athlete_event_type_id_1_map_the_correct_target_field_as_times(
+    athlete_id, athlete_name, class_name, event_classification, event_id, event_type_id
+):
+    expected_data = {
+        "id": athlete_id,
+        "name": athlete_name,
+        "class": class_name,
+        "eventClassification": event_classification,
+        "eventId": event_id,
+        "eventTypeId": event_type_id
+    }
+
+    actual_result = transform(expected_data)
+
+    assert "times" == actual_result["personalBest"]

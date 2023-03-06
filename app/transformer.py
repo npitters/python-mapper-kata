@@ -17,6 +17,12 @@ EVENT_NAMES = {
 }
 
 
+EVENT_TYPE = {
+    1: "times",
+    2: "marks"
+}
+
+
 class ClassificationKey(Enum):
     G = "Girls"
     B = "Boys"
@@ -74,6 +80,8 @@ def transform(raw_data):
         raw_data["eventClassification"]
     )
     transform_data["eventName"] = _event_name_transformer(raw_data["eventId"])
+    if raw_data["eventTypeId"]:
+        transform_data["personalBest"] = _event_type_id_transformer(raw_data["eventTypeId"])
 
     return transform_data
 
@@ -106,3 +114,7 @@ def _classification_transformer(class_name):
 
 def _event_name_transformer(event_id):
     return EVENT_NAMES[event_id]
+
+def _event_type_id_transformer(event_type_id):
+    int(event_type_id)
+    return EVENT_TYPE[event_type_id]
