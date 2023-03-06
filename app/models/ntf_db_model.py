@@ -5,13 +5,15 @@ class TrackAndFieldDb:
         name: str = None,
         grade: str = None,
         classification: str = None,
-        eventName: int = None,
+        event_name: int = None,
+        personal_best: int = None,
     ):
         self.id = id
         self.name = name
         self.grade = grade
         self.classification = classification
-        self.eventName = eventName
+        self.event_name = event_name
+        self.personal_best = personal_best
 
     @staticmethod
     def from_json(json_dict):
@@ -20,5 +22,6 @@ class TrackAndFieldDb:
             name=json_dict.get("name"),
             grade=json_dict.get("class"),
             classification=json_dict.get("eventClassification"),
-            eventName=json_dict.get("eventId"),
+            event_name=json_dict.get("eventId"),
+            personal_best=json_dict.get("eventTypeId"),
         )
