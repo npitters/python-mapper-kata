@@ -53,15 +53,13 @@ class MissingRequiredFieldException(Exception):
 def transform(request_data):
     response_dict = {}
 
-    if not request_data:
-        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, ''")
     if not request_data["id"]:
-        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, 'id'")
+        raise MissingRequiredFieldException(f"{DEFAULT_MESSAGE}, 'id'")
     if not request_data["class"]:
-        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, 'class'")
+        raise MissingRequiredFieldException(f"{DEFAULT_MESSAGE}, 'class'")
     if not request_data["eventClassification"]:
         raise MissingRequiredFieldException(
-            F"{DEFAULT_MESSAGE}, 'eventClassification'"
+            f"{DEFAULT_MESSAGE}, 'eventClassification'"
         )
 
     name = _parse_name(request_data["name"])
@@ -102,12 +100,12 @@ def _grade_transformer(class_data):
 
 def _name_transformer(full_name, index=0):
     if index > 0:
-        firstName = full_name[0]
-        lastName = full_name[1]
-        return (firstName, lastName)
-    lastName = "Unknown" if not full_name[0] else full_name[0]
+        first_name = full_name[0]
+        last_name = full_name[1]
+        return (first_name, last_name)
+    last_name = "Unknown" if not full_name[0] else full_name[0]
 
-    return lastName
+    return last_name
 
 
 def _classification_transformer(class_name):

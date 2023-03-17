@@ -22,7 +22,7 @@ def test_transform_with_source_id_returns_id_string(athlete_id, expected):
     assert expected == actual_result["id"]
 
 
-@pytest.mark.parametrize("athlete_id", [("")])
+@pytest.mark.parametrize("athlete_id", [(""), ()])
 def test_transform_with_invalid_source_id_field_returns_exception_with_missing_field_id(
     athlete_id,
 ):
@@ -32,16 +32,6 @@ def test_transform_with_invalid_source_id_field_returns_exception_with_missing_f
         transform(data)
 
     assert "Missing required field, 'id'" in str(err.value)
-
-
-@pytest.mark.parametrize("athlete_id", [()])
-def test_transform_with_missing_source_id_field_returns_exception(athlete_id):
-    data = {}
-
-    with pytest.raises(Exception) as err:
-        transform(data)
-
-    assert "Missing required field, ''" in str(err.value)
 
 
 @pytest.mark.parametrize(
