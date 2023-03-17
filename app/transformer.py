@@ -127,11 +127,5 @@ def _find_personal_best_score(score_data, score_key):
         lowest_score = sorted(scores_list, reverse=True)[0]
         return lowest_score
     else:
-        highest_score = _sort_high_score(scores_list)
+        highest_score = sorted(scores_list, key=lambda x: int(x[:1]), reverse=True)[-1]
         return highest_score
-
-
-def _sort_high_score(scores_list):
-    scores_list.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
-    return scores_list[-1]
-     
