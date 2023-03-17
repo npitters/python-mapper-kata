@@ -7,6 +7,7 @@ class TrackAndFieldDb:
         classification: str = None,
         event_name: int = None,
         personal_best: int = None,
+        personal_score: str = None
     ):
         self.id = id
         self.name = name
@@ -14,6 +15,7 @@ class TrackAndFieldDb:
         self.classification = classification
         self.event_name = event_name
         self.personal_best = personal_best
+        self.personal_score = personal_score
 
     @staticmethod
     def from_json(json_dict):
@@ -24,4 +26,5 @@ class TrackAndFieldDb:
             classification=json_dict.get("eventClassification"),
             event_name=json_dict.get("eventId"),
             personal_best=json_dict.get("eventTypeId"),
+            personal_score=json_dict.get("marks", json_dict.get("times"))
         )

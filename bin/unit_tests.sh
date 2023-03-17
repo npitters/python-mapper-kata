@@ -9,4 +9,4 @@ export PYTHONPATH="./app"
 poetry install
 
 poetry run pytest -vv ./tests
-poetry run coverage report -m
+

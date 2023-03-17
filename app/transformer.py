@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+DEFAULT_SCHOOL_NAME = "Papillion Lavistia High School"
+DEFAULT_STATE_NAME = "NE"
+DEFAULT_MESSAGE = "Missing required field"
+
 EVENT_NAMES = {
     1001: "100m",
     1002: "200m",
@@ -42,48 +46,46 @@ class MissingRequiredFieldException(Exception):
     def __init__(self, field=None):
         self.field = field
 
-        default_message = f"Missing required field, '{field}'"
+        default_message = f"{DEFAULT_MESSAGE}, '{field}'"
         super().__init__(default_message)
 
 
-DEFAULT_SCHOOL_NAME = "Papillion Lavistia High School"
-DEFAULT_STATE_NAME = "NE"
+def transform(request_data):
+    response_dict = {}
 
-
-def transform(raw_data):
-    transform_data = {}
-
-    if not raw_data:
-        raise MissingRequiredFieldException("Missing required field, ''")
-    if not raw_data["id"]:
-        raise MissingRequiredFieldException("Missing required field, 'id'")
-    if not raw_data["class"]:
-        raise MissingRequiredFieldException("Missing required field, 'class'")
-    if not raw_data["eventClassification"]:
+    if not request_data:
+        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, ''")
+    if not request_data["id"]:
+        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, 'id'")
+    if not request_data["class"]:
+        raise MissingRequiredFieldException(F"{DEFAULT_MESSAGE}, 'class'")
+    if not request_data["eventClassification"]:
         raise MissingRequiredFieldException(
-            "Missing required field, 'eventClassification'"
+            F"{DEFAULT_MESSAGE}, 'eventClassification'"
         )
 
-    name = _parse_name(raw_data["name"])
+    name = _parse_name(request_data["name"])
 
     if len(name) > 1:
-        transform_data["firstName"] = _name_transformer(name, 1)[0]
-        transform_data["lastName"] = _name_transformer(name, 1)[1]
+        response_dict["firstName"] = _name_transformer(name, 1)[0]
+        response_dict["lastName"] = _name_transformer(name, 1)[1]
     else:
-        transform_data["lastName"] = _name_transformer(name)
+        response_dict["lastName"] = _name_transformer(name)
 
-    transform_data["id"] = str(_id_transformer(raw_data))
-    transform_data["school"] = DEFAULT_SCHOOL_NAME
-    transform_data["state"] = DEFAULT_STATE_NAME
-    transform_data["grade"] = _grade_transformer(raw_data["class"])
-    transform_data["classification"] = _classification_transformer(
-        raw_data["eventClassification"]
+    response_dict["id"] = str(_id_transformer(request_data))
+    response_dict["school"] = DEFAULT_SCHOOL_NAME
+    response_dict["state"] = DEFAULT_STATE_NAME
+    response_dict["grade"] = _grade_transformer(request_data["class"])
+    response_dict["classification"] = _classification_transformer(
+        request_data["eventClassification"]
     )
-    transform_data["eventName"] = _event_name_transformer(raw_data["eventId"])
-    if raw_data["eventTypeId"]:
-        transform_data["personalBest"] = _event_type_id_transformer(raw_data["eventTypeId"])
+    response_dict["eventName"] = _event_name_transformer(request_data["eventId"])
+    if request_data["eventTypeId"]:
+        score_key = _event_type_id_transformer(request_data["eventTypeId"])
+        score_data = request_data[score_key]
+        response_dict["personalBest"] = _find_personal_best_score(score_data, score_key)
 
-    return transform_data
+    return response_dict
 
 
 def _id_transformer(id_name):
@@ -115,6 +117,23 @@ def _classification_transformer(class_name):
 def _event_name_transformer(event_id):
     return EVENT_NAMES[event_id]
 
+
 def _event_type_id_transformer(event_type_id):
     int(event_type_id)
     return EVENT_TYPE[event_type_id]
+
+
+def _find_personal_best_score(score_data, score_key):
+    scores_list = score_data.split("|")
+    if score_key == "times":
+        lowest_score = sorted(scores_list, reverse=True)[0]
+        return lowest_score
+    else:
+        highest_score = _sort_high_score(scores_list)
+        return highest_score
+
+
+def _sort_high_score(scores_list):
+    scores_list.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+    return scores_list[-1]
+     
